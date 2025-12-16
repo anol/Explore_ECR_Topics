@@ -18,7 +18,11 @@ void Startup_point::main_func()
     std::cout << "Hello, Startup." << std::endl;
     initialize();
     auto* topic = attach_topic("startup_point");
-    put_message("start_heart");
+    Plumbing::Topic_message command{
+        Plumbing::Topic_message::Command_type,
+        "start_heart", "startup_point", 0, reinterpret_cast<const uint8_t*>("")
+    };
+    put_message(command, "start_heart");
     while (true)
     {
         if (const auto* message = get_message(topic))

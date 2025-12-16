@@ -10,8 +10,10 @@ namespace Plumbing
 {
     class Topic_message
     {
+    public:
         enum Topic_type : uint8_t { Sync_type, Event_type, Command_type, Reply_type };
 
+    private:
         enum { Max_data_length = 8, };
 
         uint16_t the_topic_id{};
@@ -24,10 +26,9 @@ namespace Plumbing
     public:
         Topic_message() = default;
 
-        Topic_message(const Topic_type type, const uint16_t topic, const uint16_t point, const uint8_t length) :
-            the_topic_id(topic), the_point_id(point), the_topic_type(type), the_data_length(length)
-        {
-        }
+        Topic_message(Topic_type type, uint16_t topic, uint16_t point, uint8_t length, const uint8_t* data);
+        Topic_message(Topic_type type, const char* topic, const char* point, uint8_t length, const uint8_t* data);
+        Topic_message(Topic_type type, uint16_t topic, const char* point, uint8_t length, const uint8_t* data);
 
         [[nodiscard]] Topic_type get_topic_type() const { return the_topic_type; }
         [[nodiscard]] uint16_t get_topic_id() const { return the_topic_id; }

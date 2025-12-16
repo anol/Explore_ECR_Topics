@@ -34,8 +34,7 @@ namespace Plumbing
         Topic_handle* attach_topic(const char* str);
         Topic_handle* attach_all_topics();
         Topic_message* get_message(Topic_handle* topic_handle);
-        void put_message(const char* str);
-        void put_message(Topic_message* message, const char* str);
+        void put_message(const Topic_message& message, const char* str);
         [[nodiscard]] Platform::Platform_interface& get_platform() const { return use_platform; }
         virtual void main_func() = 0;
     };

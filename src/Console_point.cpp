@@ -17,7 +17,7 @@ void Console_point::main_func()
 {
     std::cout << "Hello, Console." << std::endl;
     initialize();
-    auto* topic = attach_all_topics();
+    auto* topic = attach_topic("heartbeat");
     while (true)
     {
         if (auto* message = get_message(topic))

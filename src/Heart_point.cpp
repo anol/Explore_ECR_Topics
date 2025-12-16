@@ -26,22 +26,27 @@ void Heart_point::main_func()
     {
         if (auto* message = get_message(optional_start))
         {
-            std::cout << "Heart: start_heart" << std::endl;
-            get_platform().get_tick_timer().add_callback(this,
-                                                         [](void*)
-                                                         {
-                                                         });
-            get_platform().get_tick_timer().initialize();
+            std::cout << "Heart: start_heart, Topic=" << static_cast<int>(message->get_topic_id()) << std::endl;
             is_started = true;
-            put_message(message, "heart_started");
+            Plumbing::Topic_message reply{
+                Plumbing::Topic_message::Reply_type,
+                message->get_point_id(), "heart_started",
+                0, reinterpret_cast<const uint8_t*>("")
+            };
+            put_message(reply, "heart_started");
         }
         else
         {
             Platform_adapter::power_nap();
-            if (is_started && count++ > 10)
+            if (is_started && (count++ > 10))
             {
                 count = 0;
-                put_message(message, "hearbeat");
+                Plumbing::Topic_message heartbeat{
+                    Plumbing::Topic_message::Reply_type,
+                    "heartbeat", "",
+                    0, reinterpret_cast<const uint8_t*>("")
+                };
+                put_message(heartbeat, "heartbeat");
             }
         }
     }

@@ -6,41 +6,52 @@
 
 namespace Plumbing
 {
-    Topic_broker::Topic_broker()
-    {
-    }
 
     Topic_handle* Topic_broker::attach_topic(const char* str)
     {
         auto hash = get_hash(str);
-        for (auto topic_hash : the_topic_hash)
+        for (int index = 0; index < the_topic_count; index++)
         {
-            if (topic_hash == hash)
+            if (the_topic_hash[index] == hash)
             {
+                the_buffer[index].add_user();
+                return new Topic_handle(&the_buffer[index]);
+            }
+        }
+        if (the_topic_count < Max_topics)
+        {
+            the_topic_hash[the_topic_count] = hash;
+            the_buffer[the_topic_count].add_user();
+            return new Topic_handle(&the_buffer[the_topic_count++]);
+        }
+        return nullptr;
+    }
 
+    Topic_message* Topic_broker::get_message(Topic_handle* handle)
+    {
+        if (handle && handle->has_topic())
+        {
+            auto* buffer = handle->get_buffer();
+            if (auto* message = buffer->get(handle->get_read_index()))
+            {
+                handle->increment_read_index();
+                return message;
             }
         }
         return nullptr;
     }
 
-    Topic_handle* Topic_broker::attach_all_topics()
+    Topic_message* Topic_broker::put_message(const Topic_message& message, const char* str)
     {
+        const auto hash = get_hash(str);
+        for (int index = 0; index < the_topic_count; index++)
+        {
+            if (the_topic_hash[index] == hash)
+            {
+                return the_buffer[index].put(message);
+            }
+        }
         return nullptr;
-    }
-
-    Topic_message* Topic_broker::get_message(Topic_handle* topic_handle)
-    {
-        return nullptr;
-    }
-
-    void Topic_broker::put_message(const char* str)
-    {
-        auto hash = get_hash(str);
-    }
-
-    void Topic_broker::put_message(Topic_message* message, const char* str)
-    {
-        auto hash = get_hash(str);
     }
 
     uint16_t Topic_broker::get_hash(const char* str)

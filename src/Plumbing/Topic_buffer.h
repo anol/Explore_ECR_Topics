@@ -17,36 +17,38 @@ namespace Plumbing
 
         void add_user() { the_user_count++; }
 
-        bool put(const Topic_message& data)
+        Topic_message* put(const Topic_message& data)
         {
-            const bool result = the_get_count[the_write_index] < 1;
-            if (result)
+            if (the_get_count[the_write_index] < 1)
             {
+                auto* message = &the_buffer[the_write_index];
                 the_get_count[the_write_index] = the_user_count;
                 the_buffer[the_write_index] = data;
-                the_write_index += 1;
-                if (the_write_index >= Buffer_size)
-                {
-                    the_write_index = 0;
-                }
+                the_write_index = increment_index(the_write_index);
+                return message;
             }
-            return result;
+            return nullptr;
         }
 
-        bool get(uint16_t read_index, Topic_message* data)
+        Topic_message* get(uint16_t read_index)
         {
-            bool result = (read_index != the_write_index);
-            if (result)
+            Topic_message* message{};
+            if (read_index != the_write_index)
             {
                 the_get_count[the_write_index]--;
-                *data = the_buffer[read_index];
-                read_index += 1;
-                if (read_index >= Buffer_size)
-                {
-                    read_index = 0;
-                }
+                message = &the_buffer[read_index];
             }
-            return result;
+            return message;
+        }
+
+        static uint16_t increment_index(uint16_t index)
+        {
+            index++;
+            if (index >= Buffer_size)
+            {
+                index = 0;
+            }
+            return index;
         }
 
     private:
