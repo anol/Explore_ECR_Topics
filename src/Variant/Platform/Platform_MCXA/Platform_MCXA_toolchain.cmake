@@ -1,0 +1,30 @@
+
+if (DEFINED GNU_VERSION)
+
+    if (${GNU_VERSION} STREQUAL "13.2.rel1")
+        set(GNU_TOOL_HOME "C:/Program Files (x86)/Arm GNU Toolchain arm-none-eabi/13.2 rel1")
+    elseif (${GNU_VERSION} STREQUAL "14.2.rel1")
+        set(GNU_TOOL_HOME "C:/Program Files (x86)/Arm GNU Toolchain arm-none-eabi/14.2 rel1")
+    else ()
+        message(FATAL_ERROR " <> Sorry, the GNU_VERSION='${GNU_VERSION}' is not supported <> ")
+    endif ()
+
+    if (EXISTS ${GNU_TOOL_HOME})
+        set(CMAKE_CROSSCOMPILING 1)
+        set(CMAKE_SYSTEM_NAME Generic)
+        set(CMAKE_SYSTEM_PROCESSOR arm)
+        # Use nosys_libc for the CMake test compilation
+        set(CMAKE_EXE_LINKER_FLAGS --specs=nosys.specs)
+        set(CMAKE_ASM_COMPILER ${GNU_TOOL_HOME}/bin/arm-none-eabi-gcc.exe)
+        set(CMAKE_C_COMPILER ${GNU_TOOL_HOME}/bin/arm-none-eabi-gcc.exe)
+        set(CMAKE_CXX_COMPILER ${GNU_TOOL_HOME}/bin/arm-none-eabi-g++.exe)
+        set(CMAKE_LINKER ${GNU_TOOL_HOME}/bin/arm-none-eabi-gcc.exe)
+        set(OBJCOPY ${GNU_TOOL_HOME}/bin/arm-none-eabi-objcopy.exe)
+        set(OBJDUMP ${GNU_TOOL_HOME}/bin/arm-none-eabi-objdump.exe)
+    else ()
+        message(FATAL_ERROR " <> Sorry, the GNU_TOOL_HOME='${GNU_TOOL_HOME}' is not installed <> ")
+    endif ()
+
+else ()
+    message(FATAL_ERROR " <> GNU_VERSION is not defined <> ")
+endif ()
