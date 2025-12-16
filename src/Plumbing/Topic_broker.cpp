@@ -4,9 +4,10 @@
 
 #include "Topic_broker.h"
 
+#include <iostream>
+
 namespace Plumbing
 {
-
     Topic_handle* Topic_broker::attach_topic(const char* str)
     {
         auto hash = get_hash(str);
@@ -22,6 +23,7 @@ namespace Plumbing
         {
             the_topic_hash[the_topic_count] = hash;
             the_buffer[the_topic_count].add_user();
+            optional_topic_name[the_topic_count] = str;
             return new Topic_handle(&the_buffer[the_topic_count++]);
         }
         return nullptr;
@@ -41,9 +43,9 @@ namespace Plumbing
         return nullptr;
     }
 
-    Topic_message* Topic_broker::put_message(const Topic_message& message, const char* str)
+    Topic_message* Topic_broker::put_message(const Topic_message& message)
     {
-        const auto hash = get_hash(str);
+        const auto hash = message.get_topic_id();
         for (int index = 0; index < the_topic_count; index++)
         {
             if (the_topic_hash[index] == hash)
@@ -52,6 +54,17 @@ namespace Plumbing
             }
         }
         return nullptr;
+    }
+
+    void Topic_broker::dump() const
+    {
+        for (int index = 0; index < the_topic_count; index++)
+        {
+            std::cout << index << ": hash=" << static_cast<int>(the_topic_hash[index]);
+            std::cout << ", name=" << (optional_topic_name[index] ? optional_topic_name[index] : "?");
+            the_buffer[index].dump();
+        }
+        std::cout << std::endl;
     }
 
     uint16_t Topic_broker::get_hash(const char* str)

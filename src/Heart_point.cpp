@@ -33,7 +33,7 @@ void Heart_point::main_func()
                 message->get_point_id(), "heart_started",
                 0, reinterpret_cast<const uint8_t*>("")
             };
-            put_message(reply, "heart_started");
+            put_message(reply);
         }
         else
         {
@@ -46,7 +46,7 @@ void Heart_point::main_func()
                     "heartbeat", "",
                     0, reinterpret_cast<const uint8_t*>("")
                 };
-                put_message(heartbeat, "heartbeat");
+                put_message(heartbeat);
             }
         }
     }

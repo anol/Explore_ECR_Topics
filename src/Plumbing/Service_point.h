@@ -32,10 +32,10 @@ namespace Plumbing
     protected:
         void initialize();
         Topic_handle* attach_topic(const char* str);
-        Topic_handle* attach_all_topics();
         Topic_message* get_message(Topic_handle* topic_handle);
-        void put_message(const Topic_message& message, const char* str);
+        void put_message(const Topic_message& message);
         [[nodiscard]] Platform::Platform_interface& get_platform() const { return use_platform; }
+        [[nodiscard]] Topic_broker& get_broker() const { return use_broker; }
         virtual void main_func() = 0;
     };
 } // Topic_plumbing

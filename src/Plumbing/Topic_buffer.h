@@ -4,6 +4,8 @@
 
 #ifndef EXPLORE_ECR_TOPICS_TOPIC_BUFFER_H
 #define EXPLORE_ECR_TOPICS_TOPIC_BUFFER_H
+#include <iostream>
+
 #include "Topic_message.h"
 
 namespace Plumbing
@@ -39,6 +41,12 @@ namespace Plumbing
                 message = &the_buffer[read_index];
             }
             return message;
+        }
+
+        void dump() const
+        {
+            std::cout << ", users=" << the_user_count;
+            std::cout << ", write=" << static_cast<int>(the_write_index) << std::endl;
         }
 
         static uint16_t increment_index(uint16_t index)

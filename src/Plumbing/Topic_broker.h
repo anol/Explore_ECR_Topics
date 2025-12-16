@@ -16,13 +16,15 @@ namespace Plumbing
         enum { Max_topics = 16 };
 
         uint16_t the_topic_count{};
+        const char* optional_topic_name[Max_topics]{};
         uint16_t the_topic_hash[Max_topics]{};
         Topic_buffer the_buffer[Max_topics]{};
 
     public:
         Topic_broker() = default;
         Topic_handle* attach_topic(const char* str);
-        Topic_message* put_message(const Topic_message& message, const char* str);
+        Topic_message* put_message(const Topic_message& message);
+        void dump() const;
         static Topic_message* get_message(Topic_handle* handle);
         static uint16_t get_hash(const char* str);
     };

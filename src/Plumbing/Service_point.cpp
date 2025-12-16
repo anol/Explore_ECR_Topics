@@ -34,8 +34,8 @@ namespace Plumbing
         return use_broker.get_message(topic_handle);
     }
 
-    void Service_point::put_message(const Topic_message& message, const char* str)
+    void Service_point::put_message(const Topic_message& message)
     {
-        use_broker.put_message(message, str);
+        use_broker.put_message(message);
     }
 } // Topic_plumbing

@@ -22,7 +22,7 @@ void Startup_point::main_func()
         Plumbing::Topic_message::Command_type,
         "start_heart", "startup_point", 0, reinterpret_cast<const uint8_t*>("")
     };
-    put_message(command, "start_heart");
+    put_message(command);
     while (true)
     {
         if (const auto* message = get_message(topic))
