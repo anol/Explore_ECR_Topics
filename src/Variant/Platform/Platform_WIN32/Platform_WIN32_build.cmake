@@ -6,7 +6,7 @@ configure_file(${PROJECT_NAME}_config.h.in ${PROJECT_BINARY_DIR}/Target_config.h
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy
         ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}.exe
-        ${MY_BINARY_DIR}/${TITLE}_${PROJECT_VERSION_MAJOR}_${PROJECT_VERSION_MINOR}.exe
+        ${MY_BINARY_DIR}/${PROJECT_NAME}.exe
 )
 
 target_compile_options(${PROJECT_NAME} PUBLIC
